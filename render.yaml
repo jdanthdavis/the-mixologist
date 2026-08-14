@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: mixology-order-advisor
+    runtime: static
+    staticPublishPath: ./
+    buildCommand: ""
+    autoDeploy: true
