@@ -300,6 +300,39 @@
           grid-template-columns: 1fr;
         }
       }
+
+      .tooltip-label {
+        position: relative;
+        cursor: help;
+        border-bottom: 1px dotted var(--muted);
+      }
+
+      .tooltip-label:hover::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        bottom: 125%;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--text);
+        color: var(--panel);
+        padding: 8px 12px;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        white-space: nowrap;
+        z-index: 1000;
+        box-shadow: 0 4px 12px rgba(47, 43, 37, 0.15);
+      }
+
+      .tooltip-label:hover::before {
+        content: '';
+        position: absolute;
+        bottom: 115%;
+        left: 50%;
+        transform: translateX(-50%);
+        border: 6px solid transparent;
+        border-top-color: var(--text);
+        z-index: 1000;
+      }
     </style>
   </head>
   <body>
@@ -330,7 +363,7 @@
 
         <div class="checkbox-field">
           <input id="ironmanMode" type="checkbox" />
-          <label for="ironmanMode">Ironman / limited paste mode</label>
+          <label for="ironmanMode" class="tooltip-label" data-tooltip="Adds penalty to weak single-paste fillers for paste conservation">Ironman / limited paste mode</label>
         </div>
       </section>
 
@@ -704,8 +737,7 @@
 
         const makeText = makeOrders.join(', ');
         const skipText = skipOrders.length ? skipOrders.join(', ') : 'none';
-        const ironmanTag = ironmanMode ? ' Ironman mode adds a small penalty to weak single-paste fillers to favour paste conservation.' : '';
-        explanationEl.textContent = `Make ${makeText}; skip ${skipText}. This subset gives the highest ${targetLabel.toLowerCase()} points per paste, using the tier bonus for a ${bestSubset.subset.length}-potion hand-in.${ironmanTag}`;
+        explanationEl.textContent = `Make ${makeText}; skip ${skipText}. This subset gives the highest ${targetLabel.toLowerCase()} points per paste, using the tier bonus for a ${bestSubset.subset.length}-potion hand-in.`;
       }
 
       function formatDelta(value) {
