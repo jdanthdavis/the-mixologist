@@ -1,7 +1,11 @@
 services:
   - type: web
     name: mixology-order-advisor
-    runtime: static
-    staticPublishPath: ./
-    buildCommand: ""
+    runtime: node
+    buildCommand: npm install serve
+    startCommand: npx serve -s . -l 10000
+    branch: main
+    rootDir: .
     autoDeploy: true
+    healthCheckPath: /
+    plan: starter

@@ -1,0 +1,9 @@
+{
+  "name": "mixology-order-advisor",
+  "version": "1.0.0",
+  "description": "Single-page app for Mastering Mixology order optimization",
+  "license": "MIT",
+  "engines": {
+    "node": "20.11.0"
+  }
+}
