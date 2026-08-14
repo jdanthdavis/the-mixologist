@@ -26,6 +26,10 @@ Recommended Render setup:
 
 The included [render.yaml](render.yaml) is ready to use with Render when the repo is connected.
 
+## Assets
+
+- `mox_resin.png`, `aga_resin.png`, `lye_resin.png` — small icons shown next to the resin names in the Resin tracker section.
+
 ## Notes
 
 - No backend is required.
