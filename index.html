@@ -6,18 +6,22 @@
     <title>Mixology Order Advisor</title>
     <style>
       :root {
-        --bg: #f4f1ea;
-        --panel: #fffdf9;
-        --panel-alt: #f8f4ef;
-        --border: #d8c9b2;
-        --text: #2f2b25;
-        --muted: #6d6259;
-        --accent: #6e7b50;
-        --accent-strong: #4d5e39;
-        --warning: #9d6334;
-        --good: #3f7a46;
-        --bad: #9c4a3d;
-        --shadow: 0 8px 18px rgba(47, 43, 37, 0.08);
+        /* Palette pulled from oldschool.runescape.wiki's own site.styles (light theme tokens) */
+        --bg: #c0a886;
+        --panel: #e2dbc8;
+        --panel-alt: #d8ccb4;
+        --border: #94866d;
+        --text: #000000;
+        --muted: #4c4c4c;
+        --accent: #936039;
+        --accent-strong: #605443;
+        --warning: #786300;
+        --warning-bg: #fcea94;
+        --good: #2e5e05;
+        --good-bg: #c3e8a3;
+        --bad: #801c13;
+        --bad-bg: #fbc0ba;
+        --shadow: 0 2px 6px rgba(24, 20, 12, 0.2);
       }
 
       * {
@@ -26,7 +30,7 @@
 
       body {
         margin: 0;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        font-family: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
         background: var(--bg);
         color: var(--text);
       }
@@ -43,7 +47,11 @@
 
       h1 {
         margin: 0;
+        font-family: "PT Serif", "Palatino", "Georgia", serif;
+        font-weight: 400;
         font-size: clamp(1.9rem, 3vw, 2.7rem);
+        padding-bottom: 10px;
+        border-bottom: 1px solid var(--border);
       }
 
       .subtitle {
@@ -55,7 +63,7 @@
       .panel {
         background: var(--panel);
         border: 1px solid var(--border);
-        border-radius: 16px;
+        border-radius: 3px;
         box-shadow: var(--shadow);
       }
 
@@ -106,8 +114,8 @@
         width: 100%;
         padding: 10px 12px;
         border: 1px solid var(--border);
-        border-radius: 10px;
-        background: #fff;
+        border-radius: 3px;
+        background: #efeee6;
         color: var(--text);
       }
 
@@ -120,26 +128,42 @@
 
       .order-card {
         padding: 18px;
-        border-radius: 16px;
+        border-radius: 3px;
         background: var(--panel-alt);
         border: 1px solid var(--border);
       }
 
       .order-card h3 {
         margin: 0 0 12px;
+        font-family: "PT Serif", "Palatino", "Georgia", serif;
+        font-weight: 400;
         font-size: 1.1rem;
+      }
+
+      .digweed-field {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 10px;
+        font-size: 0.85rem;
+        color: var(--muted);
+        cursor: pointer;
+      }
+
+      .digweed-field input {
+        width: 16px;
+        height: 16px;
+        accent-color: var(--accent-strong);
       }
 
       .order-card.skip-order {
         border-color: var(--bad);
-        box-shadow: 0 0 0 1px var(--bad) inset, 0 18px 34px -8px rgba(156, 74, 61, 0.65);
-        transition: box-shadow 0.2s ease, border-color 0.2s ease;
+        transition: border-color 0.2s ease;
       }
 
       .order-card.make-order {
         border-color: var(--good);
-        box-shadow: 0 0 0 1px var(--good) inset, 0 18px 34px -8px rgba(63, 122, 70, 0.65);
-        transition: box-shadow 0.2s ease, border-color 0.2s ease;
+        transition: border-color 0.2s ease;
       }
 
       .status {
@@ -158,39 +182,47 @@
       }
 
       .status.make {
-        background: rgba(63, 122, 70, 0.12);
+        background: var(--good-bg);
         color: var(--good);
       }
 
       .status.skip {
-        background: rgba(156, 74, 61, 0.12);
+        background: var(--bad-bg);
         color: var(--bad);
       }
 
       .status.pending {
-        background: rgba(157, 99, 52, 0.12);
+        background: var(--warning-bg);
         color: var(--warning);
       }
 
       .action-row {
         display: flex;
         justify-content: center;
+        gap: 12px;
         margin: 12px 0 20px;
       }
 
       button {
-        border: none;
-        border-radius: 10px;
+        border: 1px solid #3c352a;
+        border-radius: 3px;
         padding: 12px 18px;
         cursor: pointer;
-        background: var(--accent);
-        color: white;
+        background: var(--accent-strong);
+        color: #fff;
         font-weight: 700;
         transition: background 0.15s ease;
       }
 
       button:hover {
-        background: var(--accent-strong);
+        background: #3a301d;
+      }
+
+      button:disabled {
+        background: var(--panel-alt);
+        border-color: var(--border);
+        color: var(--muted);
+        cursor: not-allowed;
       }
 
       .results {
@@ -201,7 +233,11 @@
       .results h2,
       .tracker h2 {
         margin: 0 0 12px;
+        font-family: "PT Serif", "Palatino", "Georgia", serif;
+        font-weight: 400;
         font-size: 1.25rem;
+        padding-bottom: 8px;
+        border-bottom: 1px solid var(--border);
       }
 
       .summary-grid {
@@ -214,7 +250,7 @@
       .stat-box {
         background: var(--panel-alt);
         border: 1px solid var(--border);
-        border-radius: 12px;
+        border-radius: 3px;
         padding: 12px;
       }
 
@@ -260,7 +296,7 @@
       .tracker-card {
         background: var(--panel-alt);
         border: 1px solid var(--border);
-        border-radius: 12px;
+        border-radius: 3px;
         padding: 14px;
       }
 
@@ -427,7 +463,7 @@
       <section class="panel controls">
         <div class="field">
           <label for="herbloreLevel">Herblore level</label>
-          <input id="herbloreLevel" type="number" min="1" max="99" value="66" />
+          <input id="herbloreLevel" type="number" min="60" max="99" value="60" />
         </div>
 
         <div class="field">
@@ -440,6 +476,7 @@
             <option value="aga">Aga points / paste</option>
             <option value="lye">Lye points / paste</option>
             <option value="total">Total points / paste</option>
+            <option value="xp">XP / paste</option>
           </select>
         </div>
 
@@ -453,18 +490,30 @@
         <div class="panel order-card">
           <h3>Order 1</h3>
           <select id="order1" class="recipe-select"></select>
+          <label class="digweed-field" for="digweed1">
+            <input id="digweed1" type="checkbox" class="digweed-checkbox" />
+            <span class="tooltip-label" data-tooltip="Doubles this order's resin and XP when handed in">Digweed?</span>
+          </label>
           <div id="status1" class="status pending">Pending</div>
         </div>
 
         <div class="panel order-card">
           <h3>Order 2</h3>
           <select id="order2" class="recipe-select"></select>
+          <label class="digweed-field" for="digweed2">
+            <input id="digweed2" type="checkbox" class="digweed-checkbox" />
+            <span class="tooltip-label" data-tooltip="Doubles this order's resin and XP when handed in">Digweed?</span>
+          </label>
           <div id="status2" class="status pending">Pending</div>
         </div>
 
         <div class="panel order-card">
           <h3>Order 3</h3>
           <select id="order3" class="recipe-select"></select>
+          <label class="digweed-field" for="digweed3">
+            <input id="digweed3" type="checkbox" class="digweed-checkbox" />
+            <span class="tooltip-label" data-tooltip="Doubles this order's resin and XP when handed in">Digweed?</span>
+          </label>
           <div id="status3" class="status pending">Pending</div>
         </div>
       </section>
@@ -474,7 +523,7 @@
       </div>
 
       <div class="action-row">
-        <button id="checkBtn" type="button">Check orders</button>
+        <button id="completeOrdersBtn" type="button" disabled>Complete orders</button>
       </div>
 
       <section class="panel results" id="resultsPanel">
@@ -568,24 +617,29 @@
 
     <script>
       const recipes = [
-        { name: 'AAA', level: 60, cost: { mox: 0, aga: 3, lye: 0 }, rewards: { 1: { aga: 20 }, 2: { aga: 24 }, 3: { aga: 28 } } },
-        { name: 'MMM', level: 60, cost: { mox: 3, aga: 0, lye: 0 }, rewards: { 1: { mox: 20 }, 2: { mox: 24 }, 3: { mox: 28 } } },
-        { name: 'LLL', level: 60, cost: { mox: 0, aga: 0, lye: 3 }, rewards: { 1: { lye: 20 }, 2: { lye: 24 }, 3: { lye: 28 } } },
-        { name: 'MMA', level: 63, cost: { mox: 2, aga: 1, lye: 0 }, rewards: { 1: { mox: 20, aga: 10 }, 2: { mox: 24, aga: 12 }, 3: { mox: 28, aga: 14 } } },
-        { name: 'MML', level: 66, cost: { mox: 2, aga: 0, lye: 1 }, rewards: { 1: { mox: 20, lye: 10 }, 2: { mox: 24, lye: 12 }, 3: { mox: 28, lye: 14 } } },
-        { name: 'AAM', level: 69, cost: { mox: 1, aga: 2, lye: 0 }, rewards: { 1: { mox: 10, aga: 20 }, 2: { mox: 12, aga: 24 }, 3: { mox: 14, aga: 28 } } },
-        { name: 'ALA', level: 72, cost: { mox: 0, aga: 2, lye: 1 }, rewards: { 1: { aga: 20, lye: 10 }, 2: { aga: 24, lye: 12 }, 3: { aga: 28, lye: 14 } } },
-        { name: 'MLL', level: 75, cost: { mox: 1, aga: 0, lye: 2 }, rewards: { 1: { mox: 10, lye: 20 }, 2: { mox: 12, lye: 24 }, 3: { mox: 14, lye: 28 } } },
-        { name: 'ALL', level: 78, cost: { mox: 0, aga: 1, lye: 2 }, rewards: { 1: { aga: 10, lye: 20 }, 2: { aga: 12, lye: 24 }, 3: { aga: 14, lye: 28 } } },
-        { name: 'MAL', level: 81, cost: { mox: 1, aga: 1, lye: 1 }, rewards: { 1: { mox: 20, aga: 20, lye: 20 }, 2: { mox: 24, aga: 24, lye: 24 }, 3: { mox: 28, aga: 28, lye: 28 } } }
+        { name: 'AAA', level: 60, cost: { mox: 0, aga: 3, lye: 0 }, rewards: { 1: { aga: 20 }, 2: { aga: 24 }, 3: { aga: 28 } }, xp: { 1: 190, 2: 228, 3: 266 } },
+        { name: 'MMM', level: 60, cost: { mox: 3, aga: 0, lye: 0 }, rewards: { 1: { mox: 20 }, 2: { mox: 24 }, 3: { mox: 28 } }, xp: { 1: 190, 2: 228, 3: 266 } },
+        { name: 'LLL', level: 60, cost: { mox: 0, aga: 0, lye: 3 }, rewards: { 1: { lye: 20 }, 2: { lye: 24 }, 3: { lye: 28 } }, xp: { 1: 190, 2: 228, 3: 266 } },
+        { name: 'MMA', level: 63, cost: { mox: 2, aga: 1, lye: 0 }, rewards: { 1: { mox: 20, aga: 10 }, 2: { mox: 24, aga: 12 }, 3: { mox: 28, aga: 14 } }, xp: { 1: 215, 2: 258, 3: 301 } },
+        { name: 'MML', level: 66, cost: { mox: 2, aga: 0, lye: 1 }, rewards: { 1: { mox: 20, lye: 10 }, 2: { mox: 24, lye: 12 }, 3: { mox: 28, lye: 14 } }, xp: { 1: 240, 2: 288, 3: 336 } },
+        { name: 'AAM', level: 69, cost: { mox: 1, aga: 2, lye: 0 }, rewards: { 1: { mox: 10, aga: 20 }, 2: { mox: 12, aga: 24 }, 3: { mox: 14, aga: 28 } }, xp: { 1: 265, 2: 318, 3: 371 } },
+        { name: 'ALA', level: 72, cost: { mox: 0, aga: 2, lye: 1 }, rewards: { 1: { aga: 20, lye: 10 }, 2: { aga: 24, lye: 12 }, 3: { aga: 28, lye: 14 } }, xp: { 1: 290, 2: 348, 3: 406 } },
+        { name: 'MLL', level: 75, cost: { mox: 1, aga: 0, lye: 2 }, rewards: { 1: { mox: 10, lye: 20 }, 2: { mox: 12, lye: 24 }, 3: { mox: 14, lye: 28 } }, xp: { 1: 315, 2: 378, 3: 441 } },
+        { name: 'ALL', level: 78, cost: { mox: 0, aga: 1, lye: 2 }, rewards: { 1: { aga: 10, lye: 20 }, 2: { aga: 12, lye: 24 }, 3: { aga: 14, lye: 28 } }, xp: { 1: 340, 2: 408, 3: 476 } },
+        { name: 'MAL', level: 81, cost: { mox: 1, aga: 1, lye: 1 }, rewards: { 1: { mox: 20, aga: 20, lye: 20 }, 2: { mox: 24, aga: 24, lye: 24 }, 3: { mox: 28, aga: 28, lye: 28 } }, xp: { 1: 365, 2: 438, 3: 511 } }
       ];
 
       const typeLabels = {
         mox: 'Mox',
         aga: 'Aga',
         lye: 'Lye',
-        total: 'Total'
+        total: 'Total',
+        xp: 'XP'
       };
+
+      function formatTargetLabel(label) {
+        return label === 'XP' ? label : label.toLowerCase();
+      }
 
       const rewardPresets = {
         custom: { mox: 0, aga: 0, lye: 0 },
@@ -601,14 +655,23 @@
       };
 
       let presetSelected = false;
+      let currentBest = null;
       const orderSelects = ['order1', 'order2', 'order3'];
 
       function getUnlockedRecipes(level) {
         return recipes.filter((recipe) => recipe.level <= level);
       }
 
-      function getSelectedRecipes() {
-        return orderSelects.map((id) => document.getElementById(id).value).filter(Boolean);
+      function getSelectedOrders() {
+        return orderSelects
+          .map((id, index) => {
+            const value = document.getElementById(id).value;
+            const digweed = document.getElementById(`digweed${index + 1}`).checked;
+            return { recipeName: value, digweed, orderIndex: index };
+          })
+          .filter((order) => order.recipeName)
+          .map((order) => ({ ...order, recipe: getRecipeByName(order.recipeName) }))
+          .filter((order) => order.recipe);
       }
 
       function getRecipeByName(name) {
@@ -637,8 +700,8 @@
       }
 
       function getTotalPasteSpent(subset) {
-        return subset.reduce((total, recipe) => {
-          return total + Object.values(recipe.cost).reduce((sum, value) => sum + value, 0);
+        return subset.reduce((total, order) => {
+          return total + Object.values(order.recipe.cost).reduce((sum, value) => sum + value, 0);
         }, 0);
       }
 
@@ -687,12 +750,16 @@
 
       function getTargetPoints(subset, targetType) {
         const tier = subset.length;
-        return subset.reduce((total, recipe) => {
-          const rewards = recipe.rewards[tier] || {};
-          if (targetType === 'total') {
-            return total + Object.values(rewards).reduce((sum, value) => sum + value, 0);
+        return subset.reduce((total, order) => {
+          const multiplier = order.digweed ? 2 : 1;
+          if (targetType === 'xp') {
+            return total + (order.recipe.xp[tier] || 0) * multiplier;
           }
-          return total + (rewards[targetType] || 0);
+          const rewards = order.recipe.rewards[tier] || {};
+          if (targetType === 'total') {
+            return total + Object.values(rewards).reduce((sum, value) => sum + value, 0) * multiplier;
+          }
+          return total + (rewards[targetType] || 0) * multiplier;
         }, 0);
       }
 
@@ -709,15 +776,14 @@
         };
       }
 
-      function getAllNonEmptySubsets(selectedNames) {
+      function getAllNonEmptySubsets(selectedOrders) {
         const subsetOptions = [];
-        const selectedRecipes = selectedNames.map((name) => getRecipeByName(name)).filter(Boolean);
 
-        for (let mask = 1; mask < (1 << selectedRecipes.length); mask += 1) {
+        for (let mask = 1; mask < (1 << selectedOrders.length); mask += 1) {
           const subset = [];
-          for (let i = 0; i < selectedRecipes.length; i += 1) {
+          for (let i = 0; i < selectedOrders.length; i += 1) {
             if (mask & (1 << i)) {
-              subset.push(selectedRecipes[i]);
+              subset.push(selectedOrders[i]);
             }
           }
           if (subset.length > 0) {
@@ -730,8 +796,8 @@
 
       function getIronmanPenalty(subset) {
         const pureRecipes = new Set(['AAA', 'MMM', 'LLL']);
-        const pureCount = subset.filter((recipe) => pureRecipes.has(recipe.name)).length;
-        const hasMal = subset.some((recipe) => recipe.name === 'MAL');
+        const pureCount = subset.filter((order) => pureRecipes.has(order.recipe.name)).length;
+        const hasMal = subset.some((order) => order.recipe.name === 'MAL');
 
         if (hasMal) {
           return 0;
@@ -741,12 +807,12 @@
       }
 
       function chooseBestSubset(targetType) {
-        const selectedNames = getSelectedRecipes();
-        if (selectedNames.length === 0) {
+        const selectedOrders = getSelectedOrders();
+        if (selectedOrders.length === 0) {
           return null;
         }
 
-        const options = getAllNonEmptySubsets(selectedNames);
+        const options = getAllNonEmptySubsets(selectedOrders);
         if (options.length === 0) {
           return null;
         }
@@ -778,7 +844,7 @@
       }
 
       function updateOrderStatuses(bestSubset) {
-        const winningNames = bestSubset ? new Set(bestSubset.subset.map((recipe) => recipe.name)) : new Set();
+        const winningIndexes = bestSubset ? new Set(bestSubset.subset.map((order) => order.orderIndex)) : new Set();
         const explanationEl = document.getElementById('decisionExplanation');
 
         orderSelects.forEach((id, index) => {
@@ -793,7 +859,7 @@
             return;
           }
 
-          const isMaking = winningNames.has(select.value);
+          const isMaking = winningIndexes.has(index);
           statusEl.textContent = isMaking ? 'Make' : 'Skip';
           statusEl.className = `status ${isMaking ? 'make' : 'skip'}`;
           cardEl.classList.toggle('skip-order', !isMaking);
@@ -811,26 +877,23 @@
           return;
         }
 
-        const makeOrders = orderSelects
-          .map((id) => document.getElementById(id).value)
-          .filter((value) => value && winningNames.has(value));
-
-        const skipOrders = orderSelects
-          .map((id) => document.getElementById(id).value)
-          .filter((value) => value && !winningNames.has(value));
+        const describeOrder = (order) => (order.digweed ? `${order.recipe.name} (Digweed)` : order.recipe.name);
+        const selectedOrders = getSelectedOrders();
+        const makeOrders = selectedOrders.filter((order) => winningIndexes.has(order.orderIndex)).map(describeOrder);
+        const skipOrders = selectedOrders.filter((order) => !winningIndexes.has(order.orderIndex)).map(describeOrder);
 
         const targetValue = document.getElementById('targetType').value === 'suggested' ? getSuggestedTargetType() : document.getElementById('targetType').value;
-        const targetLabel = typeLabels[targetValue] || 'Total';
+        const targetLabel = formatTargetLabel(typeLabels[targetValue] || 'Total');
         const ironmanMode = document.getElementById('ironmanMode').checked;
 
         if (makeOrders.length === 0) {
-          explanationEl.textContent = `The best subset skips all current orders for this ${targetLabel.toLowerCase()} target, because the alternative mix gives the stronger points-per-paste ratio.`;
+          explanationEl.textContent = `The best subset skips all current orders for this ${targetLabel} target, because the alternative mix gives the stronger per-paste ratio.`;
           return;
         }
 
         const makeText = makeOrders.join(', ');
         const skipText = skipOrders.length ? skipOrders.join(', ') : 'none';
-        explanationEl.textContent = `Make ${makeText}; skip ${skipText}. This subset gives the highest ${targetLabel.toLowerCase()} points per paste, using the tier bonus for a ${bestSubset.subset.length}-potion hand-in.`;
+        explanationEl.textContent = `Make ${makeText}; skip ${skipText}. This subset gives the highest ${targetLabel} per paste, using the tier bonus for a ${bestSubset.subset.length}-potion hand-in.`;
       }
 
       function formatDelta(value) {
@@ -928,10 +991,47 @@
         saveCurrentResins();
       }
 
+      function updateCompleteOrdersButton() {
+        const completeBtn = document.getElementById('completeOrdersBtn');
+        completeBtn.disabled = !currentBest;
+      }
+
+      function completeOrders() {
+        if (!currentBest) {
+          return;
+        }
+
+        const tier = currentBest.subset.length;
+        const totals = { mox: 0, aga: 0, lye: 0 };
+        currentBest.subset.forEach((order) => {
+          const rewards = order.recipe.rewards[tier] || {};
+          const multiplier = order.digweed ? 2 : 1;
+          totals.mox += (rewards.mox || 0) * multiplier;
+          totals.aga += (rewards.aga || 0) * multiplier;
+          totals.lye += (rewards.lye || 0) * multiplier;
+        });
+
+        const currentMoxEl = document.getElementById('currentMox');
+        const currentAgaEl = document.getElementById('currentAga');
+        const currentLyeEl = document.getElementById('currentLye');
+        currentMoxEl.value = (Number(currentMoxEl.value) || 0) + totals.mox;
+        currentAgaEl.value = (Number(currentAgaEl.value) || 0) + totals.aga;
+        currentLyeEl.value = (Number(currentLyeEl.value) || 0) + totals.lye;
+        updateResinTracker();
+
+        orderSelects.forEach((id, index) => {
+          document.getElementById(id).value = '';
+          document.getElementById(`digweed${index + 1}`).checked = false;
+        });
+
+        renderBestSubset();
+      }
+
       function renderBestSubset() {
         const rawTargetValue = document.getElementById('targetType').value;
         const targetType = rawTargetValue === 'suggested' ? getSuggestedTargetType() : rawTargetValue;
         const best = chooseBestSubset(targetType);
+        currentBest = best;
         const subsetText = document.getElementById('bestSubsetText');
         const totalPasteValue = document.getElementById('totalPasteValue');
         const targetPointsValue = document.getElementById('targetPointsValue');
@@ -943,26 +1043,31 @@
           targetPointsValue.textContent = '0';
           ratioValue.textContent = '0.00';
           updateOrderStatuses(null);
+          updateCompleteOrdersButton();
           return;
         }
 
-        const subsetNames = best.subset.map((recipe) => recipe.name).join(' + ');
-        subsetText.textContent = `Best set: ${subsetNames} (${typeLabels[targetType]} points / paste target)`;
+        const subsetNames = best.subset.map((order) => (order.digweed ? `${order.recipe.name} (Digweed)` : order.recipe.name)).join(' + ');
+        subsetText.textContent = `Best set: ${subsetNames} (${typeLabels[targetType]} / paste target)`;
         totalPasteValue.textContent = String(best.totalPasteSpent);
         targetPointsValue.textContent = String(best.targetPoints);
         ratioValue.textContent = best.ratio.toFixed(2);
 
         updateOrderStatuses(best);
+        updateCompleteOrdersButton();
+      }
+
+      const MIN_HERBLORE_LEVEL = 60;
+
+      function getClampedLevel(rawValue) {
+        return Math.max(MIN_HERBLORE_LEVEL, Number(rawValue) || MIN_HERBLORE_LEVEL);
       }
 
       function loadHerbloreLevel() {
         const cached = localStorage.getItem('mixology_herblore_level');
-        if (cached) {
-          const level = Number(cached) || 66;
-          document.getElementById('herbloreLevel').value = level;
-          return level;
-        }
-        return 66;
+        const level = getClampedLevel(cached);
+        document.getElementById('herbloreLevel').value = level;
+        return level;
       }
 
       function loadRewardPreset() {
@@ -979,15 +1084,22 @@
       }
 
       function handleLevelChange() {
-        const level = Number(document.getElementById('herbloreLevel').value) || 1;
+        const level = getClampedLevel(document.getElementById('herbloreLevel').value);
         localStorage.setItem('mixology_herblore_level', String(level));
         populateRecipeSelects(level);
         renderBestSubset();
       }
 
+      function handleLevelBlur() {
+        const input = document.getElementById('herbloreLevel');
+        input.value = getClampedLevel(input.value);
+        handleLevelChange();
+      }
+
       document.getElementById('herbloreLevel').addEventListener('input', handleLevelChange);
+      document.getElementById('herbloreLevel').addEventListener('change', handleLevelBlur);
       document.getElementById('targetType').addEventListener('change', renderBestSubset);
-      document.getElementById('checkBtn').addEventListener('click', renderBestSubset);
+      document.getElementById('completeOrdersBtn').addEventListener('click', completeOrders);
       document.getElementById('rewardPreset').addEventListener('change', (event) => {
         applyRewardPreset(event.target.value);
         renderBestSubset();
@@ -1000,8 +1112,9 @@
         document.getElementById(id).addEventListener('input', updateResinTracker);
       });
 
-      orderSelects.forEach((id) => {
+      orderSelects.forEach((id, index) => {
         document.getElementById(id).addEventListener('change', renderBestSubset);
+        document.getElementById(`digweed${index + 1}`).addEventListener('change', renderBestSubset);
       });
 
       document.getElementById('targetType').value = 'suggested';
