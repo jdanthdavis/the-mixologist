@@ -254,6 +254,16 @@
       .tracker-card h3 {
         margin: 0 0 10px;
         font-size: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .resin-icon {
+        width: 18px;
+        height: 18px;
+        object-fit: contain;
+        flex-shrink: 0;
       }
 
       .tracker-row {
@@ -496,7 +506,7 @@
 
         <div class="tracker-grid">
           <div class="tracker-card">
-            <h3>Mox</h3>
+            <h3><img src="mox_resin.png" alt="" class="resin-icon" />Mox</h3>
             <div class="tracker-row">
               <div>
                 <label for="currentMox">Current</label>
@@ -511,7 +521,7 @@
           </div>
 
           <div class="tracker-card">
-            <h3>Aga</h3>
+            <h3><img src="aga_resin.png" alt="" class="resin-icon" />Aga</h3>
             <div class="tracker-row">
               <div>
                 <label for="currentAga">Current</label>
@@ -526,7 +536,7 @@
           </div>
 
           <div class="tracker-card">
-            <h3>Lye</h3>
+            <h3><img src="lye_resin.png" alt="" class="resin-icon" />Lye</h3>
             <div class="tracker-row">
               <div>
                 <label for="currentLye">Current</label>
