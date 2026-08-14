@@ -130,11 +130,24 @@
         font-size: 1.1rem;
       }
 
+      .order-card.skip-order {
+        border-color: var(--bad);
+        box-shadow: 0 0 0 1px var(--bad) inset, 0 18px 34px -8px rgba(156, 74, 61, 0.65);
+        transition: box-shadow 0.2s ease, border-color 0.2s ease;
+      }
+
+      .order-card.make-order {
+        border-color: var(--good);
+        box-shadow: 0 0 0 1px var(--good) inset, 0 18px 34px -8px rgba(63, 122, 70, 0.65);
+        transition: box-shadow 0.2s ease, border-color 0.2s ease;
+      }
+
       .status {
-        margin-top: 14px;
-        display: inline-flex;
+        margin: 14px auto 0;
+        display: flex;
         align-items: center;
         justify-content: center;
+        width: fit-content;
         min-width: 90px;
         padding: 7px 10px;
         border-radius: 999px;
@@ -771,16 +784,20 @@
         orderSelects.forEach((id, index) => {
           const select = document.getElementById(id);
           const statusEl = document.getElementById(`status${index + 1}`);
+          const cardEl = statusEl.closest('.order-card');
 
           if (!select.value) {
             statusEl.textContent = 'Pending';
             statusEl.className = 'status pending';
+            cardEl.classList.remove('skip-order', 'make-order');
             return;
           }
 
           const isMaking = winningNames.has(select.value);
           statusEl.textContent = isMaking ? 'Make' : 'Skip';
           statusEl.className = `status ${isMaking ? 'make' : 'skip'}`;
+          cardEl.classList.toggle('skip-order', !isMaking);
+          cardEl.classList.toggle('make-order', isMaking);
         });
 
         // Only show explanation if a preset has been selected
