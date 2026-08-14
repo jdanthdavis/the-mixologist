@@ -837,6 +837,7 @@
           document.getElementById('decisionExplanation').classList.remove('hidden');
         }
         
+        localStorage.setItem('mixology_reward_preset', key);
         updateResinTracker();
       }
 
@@ -927,8 +928,32 @@
         updateOrderStatuses(best);
       }
 
+      function loadHerbloreLevel() {
+        const cached = localStorage.getItem('mixology_herblore_level');
+        if (cached) {
+          const level = Number(cached) || 66;
+          document.getElementById('herbloreLevel').value = level;
+          return level;
+        }
+        return 66;
+      }
+
+      function loadRewardPreset() {
+        const cached = localStorage.getItem('mixology_reward_preset');
+        if (cached) {
+          document.getElementById('rewardPreset').value = cached;
+          if (cached !== 'custom') {
+            presetSelected = true;
+            document.getElementById('decisionExplanation').classList.remove('hidden');
+          }
+          return cached;
+        }
+        return 'custom';
+      }
+
       function handleLevelChange() {
         const level = Number(document.getElementById('herbloreLevel').value) || 1;
+        localStorage.setItem('mixology_herblore_level', String(level));
         populateRecipeSelects(level);
         renderBestSubset();
       }
@@ -956,7 +981,12 @@
       showCookiesPopup();
       document.getElementById('closeCookies').addEventListener('click', dismissCookiesPopup);
       loadCurrentResins();
-      populateRecipeSelects(66);
+      const savedLevel = loadHerbloreLevel();
+      const savedPreset = loadRewardPreset();
+      populateRecipeSelects(savedLevel);
+      if (savedPreset !== 'custom') {
+        applyRewardPreset(savedPreset);
+      }
       renderBestSubset();
       updateResinTracker();
     </script>
