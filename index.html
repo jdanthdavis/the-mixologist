@@ -381,6 +381,10 @@
       .cookies-popup-close:hover {
         background: var(--accent-strong);
       }
+
+      #decisionExplanation.hidden {
+        display: none;
+      }
     </style>
   </head>
   <body>
@@ -442,7 +446,7 @@
         </div>
       </section>
 
-      <div id="decisionExplanation" class="panel" style="padding: 12px 16px; margin: 0 0 16px; color: var(--muted); font-size: 0.96rem; line-height: 1.5;">
+      <div id="decisionExplanation" class="panel hidden" style="padding: 12px 16px; margin: 0 0 16px; color: var(--muted); font-size: 0.96rem; line-height: 1.5;">
         Choose three recipes and let the advisor compare the best subset for your selected target.
       </div>
 
@@ -573,6 +577,7 @@
         'expert-pack': { mox: 410, aga: 320, lye: 480 }
       };
 
+      let presetSelected = false;
       const orderSelects = ['order1', 'order2', 'order3'];
 
       function getUnlockedRecipes(level) {
@@ -768,6 +773,12 @@
           statusEl.className = `status ${isMaking ? 'make' : 'skip'}`;
         });
 
+        // Only show explanation if a preset has been selected
+        if (!presetSelected) {
+          explanationEl.classList.add('hidden');
+          return;
+        }
+
         if (!bestSubset) {
           explanationEl.textContent = 'Choose three recipes and let the advisor compare the best subset for your selected target.';
           return;
@@ -819,6 +830,13 @@
         document.getElementById('targetMox').value = preset.mox;
         document.getElementById('targetAga').value = preset.aga;
         document.getElementById('targetLye').value = preset.lye;
+        
+        // Show explanation only when a preset is selected
+        if (key !== 'custom') {
+          presetSelected = true;
+          document.getElementById('decisionExplanation').classList.remove('hidden');
+        }
+        
         updateResinTracker();
       }
 
