@@ -333,9 +333,64 @@
         border-top-color: var(--text);
         z-index: 1000;
       }
+
+      .cookies-popup {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: var(--panel);
+        border-top: 1px solid var(--border);
+        padding: 16px 18px;
+        box-shadow: 0 -4px 12px rgba(47, 43, 37, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        font-size: 0.95rem;
+        z-index: 999;
+      }
+
+      .cookies-popup.hidden {
+        display: none;
+      }
+
+      .cookies-popup-text {
+        flex: 1;
+        color: var(--text);
+      }
+
+      .cookies-popup-text strong {
+        display: block;
+        margin-bottom: 4px;
+      }
+
+      .cookies-popup-close {
+        background: var(--accent);
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 0.9rem;
+        white-space: nowrap;
+        transition: background 0.15s ease;
+      }
+
+      .cookies-popup-close:hover {
+        background: var(--accent-strong);
+      }
     </style>
   </head>
   <body>
+    <div id="cookiesPopup" class="cookies-popup">
+      <div class="cookies-popup-text">
+        <strong>Browser Storage</strong>
+        We save your current resin amounts in your browser so they persist between sessions. No data leaves your device.
+      </div>
+      <button class="cookies-popup-close" id="closeCookies">Got it</button>
+    </div>
     <div class="app">
       <header class="header">
         <h1>Mixology Order Advisor</h1>
@@ -767,6 +822,43 @@
         updateResinTracker();
       }
 
+      function saveCurrentResins() {
+        const cache = {
+          mox: Number(document.getElementById('currentMox').value) || 0,
+          aga: Number(document.getElementById('currentAga').value) || 0,
+          lye: Number(document.getElementById('currentLye').value) || 0
+        };
+        localStorage.setItem('mixology_current_resins', JSON.stringify(cache));
+      }
+
+      function loadCurrentResins() {
+        const cached = localStorage.getItem('mixology_current_resins');
+        if (cached) {
+          try {
+            const data = JSON.parse(cached);
+            if (data.mox !== undefined) document.getElementById('currentMox').value = data.mox;
+            if (data.aga !== undefined) document.getElementById('currentAga').value = data.aga;
+            if (data.lye !== undefined) document.getElementById('currentLye').value = data.lye;
+          } catch (e) {
+            console.warn('Failed to restore cached resins:', e);
+          }
+        }
+      }
+
+      function showCookiesPopup() {
+        const shown = localStorage.getItem('mixology_cookies_acknowledged');
+        if (!shown) {
+          document.getElementById('cookiesPopup').classList.remove('hidden');
+        } else {
+          document.getElementById('cookiesPopup').classList.add('hidden');
+        }
+      }
+
+      function dismissCookiesPopup() {
+        localStorage.setItem('mixology_cookies_acknowledged', 'true');
+        document.getElementById('cookiesPopup').classList.add('hidden');
+      }
+
       function updateResinTracker() {
         const resinTypes = [
           { key: 'mox', currentId: 'currentMox', targetId: 'targetMox', deltaId: 'moxDelta' },
@@ -787,6 +879,7 @@
 
         updateTargetDropdownLabel();
         updateRewardGoalSummary();
+        saveCurrentResins();
       }
 
       function renderBestSubset() {
@@ -842,6 +935,9 @@
       });
 
       document.getElementById('targetType').value = 'suggested';
+      showCookiesPopup();
+      document.getElementById('closeCookies').addEventListener('click', dismissCookiesPopup);
+      loadCurrentResins();
       populateRecipeSelects(66);
       renderBestSubset();
       updateResinTracker();
