@@ -203,6 +203,64 @@
         margin: 12px 0 20px;
       }
 
+      .resin-fly {
+        position: fixed;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        pointer-events: none;
+        z-index: 2000;
+        font-weight: 800;
+        font-size: 0.95rem;
+        color: var(--good);
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        padding: 4px 12px 4px 6px;
+        box-shadow: var(--shadow);
+        white-space: nowrap;
+        opacity: 0;
+        transform: translate(-50%, -50%);
+      }
+
+      .resin-fly img {
+        width: 20px;
+        height: 20px;
+        object-fit: contain;
+      }
+
+      .resin-fly-float {
+        animation: resin-float 1.5s ease-out forwards;
+      }
+
+      @keyframes resin-float {
+        0% {
+          opacity: 0;
+          transform: translate(-50%, -50%) scale(0.85);
+        }
+        15% {
+          opacity: 1;
+          transform: translate(-50%, -50%) scale(1);
+        }
+        100% {
+          opacity: 0;
+          transform: translate(-50%, calc(-50% - 60px)) scale(1);
+        }
+      }
+
+      .tracker-card.pulse {
+        animation: tracker-pulse 0.6s ease-out;
+      }
+
+      @keyframes tracker-pulse {
+        0% {
+          box-shadow: 0 0 0 0 rgba(46, 94, 5, 0.5);
+        }
+        100% {
+          box-shadow: 0 0 0 12px rgba(46, 94, 5, 0);
+        }
+      }
+
       button {
         border: 1px solid #3c352a;
         border-radius: 3px;
@@ -991,6 +1049,41 @@
         saveCurrentResins();
       }
 
+      const resinIcons = { mox: 'mox_resin.png', aga: 'aga_resin.png', lye: 'lye_resin.png' };
+
+      function playResinAnimation(totals) {
+        const originRect = document.getElementById('completeOrdersBtn').getBoundingClientRect();
+        const originX = originRect.left + originRect.width / 2;
+        const originY = originRect.top + originRect.height / 2;
+
+        const activeTypes = Object.keys(totals).filter((type) => totals[type]);
+
+        activeTypes.forEach((type, index) => {
+          const amount = totals[type];
+          const capitalized = type.charAt(0).toUpperCase() + type.slice(1);
+          const targetCard = document.getElementById(`current${capitalized}`).closest('.tracker-card');
+
+          const el = document.createElement('div');
+          el.className = 'resin-fly resin-fly-float';
+          el.innerHTML = `<img src="${resinIcons[type]}" alt="" /><span>+${amount}</span>`;
+
+          const delay = index * 120;
+          el.style.animationDelay = `${delay}ms`;
+
+          const spread = (index - (activeTypes.length - 1) / 2) * 110;
+          el.style.left = `${originX + spread}px`;
+          el.style.top = `${originY}px`;
+
+          el.addEventListener('animationend', () => el.remove());
+          document.body.appendChild(el);
+
+          setTimeout(() => {
+            targetCard.classList.add('pulse');
+            targetCard.addEventListener('animationend', () => targetCard.classList.remove('pulse'), { once: true });
+          }, delay);
+        });
+      }
+
       function updateCompleteOrdersButton() {
         const completeBtn = document.getElementById('completeOrdersBtn');
         completeBtn.disabled = !currentBest;
@@ -1018,6 +1111,7 @@
         currentAgaEl.value = (Number(currentAgaEl.value) || 0) + totals.aga;
         currentLyeEl.value = (Number(currentLyeEl.value) || 0) + totals.lye;
         updateResinTracker();
+        playResinAnimation(totals);
 
         orderSelects.forEach((id, index) => {
           document.getElementById(id).value = '';
@@ -1115,6 +1209,12 @@
       orderSelects.forEach((id, index) => {
         document.getElementById(id).addEventListener('change', renderBestSubset);
         document.getElementById(`digweed${index + 1}`).addEventListener('change', renderBestSubset);
+      });
+
+      // Tooltip trigger text shouldn't double as a checkbox toggle target —
+      // only the checkbox itself should check/uncheck.
+      document.querySelectorAll('.tooltip-label').forEach((el) => {
+        el.addEventListener('click', (event) => event.preventDefault());
       });
 
       document.getElementById('targetType').value = 'suggested';
